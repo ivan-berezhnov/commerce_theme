@@ -1,7 +1,8 @@
 @charset 'UTF-8';
  
 // 1.Base
-@import '_base/_config.scss';
+@import '_base/_config.scss',
+        '_base/_mixins.scss';
  
 // 2.Layouts
 @import '_layouts/_l-grid',

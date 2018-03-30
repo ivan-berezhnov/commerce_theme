@@ -1,1 +1,112 @@
-mixins
+/***************************
+BREAKPOINTS / Media Queries
+***************************/
+
+/* @include breakpoint(mobile) { selectors }; */
+@mixin breakpoint($point) {
+    /* Extra Small Devices, Phones */
+    @if $point == smobile {
+        @media only screen and (min-width : 320px) { @content ; }
+   }
+    /* Extra Small Devices, Phones */
+    @else if $point == mobile {
+        @media only screen and (min-width : 480px) { @content ; }
+   }
+   /* Small Devices, Tablets */
+    @else if $point == tablet {
+        @media only screen and (min-width : 768px) { @content ; }
+   }
+   /* Medium Devices, Desktops */
+    @else if $point == laptop {
+        @media only screen and (min-width : 992px) { @content ; }
+   }
+   /* Large Devices, Wide Screens */
+    @else if $point == desktop {
+        @media only screen and (min-width : 1200px) { @content ; }
+   }
+ }
+ 
+ /* @include transition(all,2s,ease-out); */
+@mixin transition($what: all, $time: 0.2s, $how: ease-in-out) {
+    -webkit-transition: $what $time $how;
+    -moz-transition:    $what $time $how;
+    -ms-transition:     $what $time $how;
+    -o-transition:      $what $time $how;
+    transition:         $what $time $how;
+}
+
+/* h1 { @include heading-1; } */
+@mixin heading {
+    @include title-face;
+    margin-bottom: 0.35em;
+    line-height: 1.2;
+    color: inherit;
+    a {
+      @include heading-link;
+    }
+  }
+  
+@mixin heading-1 {
+  @include heading;
+  font-size: 3.375rem;
+}
+  
+@mixin heading-2 {
+  @include heading;
+  font-size: 2.966rem;
+}
+  
+@mixin heading-3 {
+  @include heading;
+  font-size: 1.5rem;
+}
+  
+@mixin heading-4 {
+  @include heading;
+  font-size: 1.318rem;
+}
+  
+@mixin heading-5 {
+  @include heading;
+  font-size: 1rem;
+}
+  
+@mixin heading-6 {
+  @include heading;
+  font-size: 0.875rem;
+}
+
+/* @include setFont(('article', 'title')); */
+@mixin setFont($keys, $styles: $text-styles) {
+  color: map-deep-get($styles, append($keys, 'color'));
+  font-family: map-deep-get($styles, append($keys, 'font-family'));
+  font-size: map-deep-get($styles, append($keys, 'font-size'));
+  @include rem(font-size, map-deep-get($styles, append($keys, 'font-size-rem')));
+  font-style: map-deep-get($styles, append($keys, 'font-style'));
+  font-weight: map-deep-get($styles, append($keys, 'font-weight'));
+  height: map-deep-get($styles, append($keys, 'height'));
+  letter-spacing: map-deep-get($styles, append($keys, 'letter-spacing'));
+  line-height: map-deep-get($styles, append($keys, 'line-height'));
+  @include rem(line-height, map-deep-get($styles, append($keys, 'line-height-rem')));
+  margin-top: map-deep-get($styles, append($keys, 'margin-top'));
+  text-decoration: map-deep-get($styles, append($keys, 'text-decoration'));
+  text-transform: map-deep-get($styles, append($keys, 'text-transform'));
+}
+
+@mixin rem($properties, $values...) {
+  @if type-of($properties) == "map" {
+    @each $property in map-keys($properties) {
+      @include rem($property, map-get($properties, $property));
+    }
+  } @else {
+    @each $property in $properties {
+      @if $rem-fallback or $rem-px-only {
+        #{$property}: rem-convert(px, $values...);
+      }
+      @if not $rem-px-only {
+        #{$property}: rem-convert(rem, $values...);
+      }
+    }
+  }
+}
+  
