@@ -3,7 +3,7 @@
 
 const
   // Source and build folders.
-  sass_paths = ['./sass/*.s+(a|c)ss'],
+  sass_paths = ['./sass/*.s+(a|c)ss', './sass/**/*.s+(a|c)ss', './sass/**/**/*.s+(a|c)ss'],
 
   // Gulp and plugins.
   gulp         = require('gulp'),              // Require gulp.
@@ -14,7 +14,6 @@ const
   uglify       = require('gulp-uglify'),       // Minify JavaScript.
   autoprefixer = require('gulp-autoprefixer'), // Add prefix for different browsers.
   sass         = require('gulp-sass'),         // Compile Sass into CSS.
-  readlineSync = require('readline-sync'),
   browserSync  = require('browser-sync').create() // Reload the browser on file changes
 ;
 
@@ -33,12 +32,12 @@ gulp.task('sass', function () {
       browsers: ['last 10 versions'],
       cascade: false
     }))
-    .pipe(gulp.dest('./css'))
-    .pipe(filter('/css/*.css'))
+    .pipe(gulp.dest('./dist'))
     .pipe(cssnano({discardComments: {removeAll: true}}))
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./dist'))
+    .pipe(gulp.dest('./prototypes/css'))
     .pipe(browserSync.reload({stream:true}));
 });
 
@@ -69,18 +68,12 @@ gulp.task('js', function () {
  */
 gulp.task('browser', ['watch'], function () {
   browserSync.init({
-    proxy: (
-      process.argv[3] ?
-        process.argv[3].split('--')[1] :
-        readlineSync.question('Virtual host (e.g. http://local.menaiset.fi): ')
-    ),
-    socket: {
-      // For local development only use the default Browsersync local URL.
-      domain: 'localhost:3000'
-      // For external development (e.g on a mobile or tablet) use an external
-      // URL. You will need to update this to whatever BS tells you is the
-      // external URL when you run Gulp. domain: '192.168.0.13:3000'
-    }
+    server: {
+      baseDir: "./prototypes/"
+    },
+    port: 8080,
+    open: true,
+    notify: false
   });
 });
 

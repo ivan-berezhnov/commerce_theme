@@ -1,1 +1,5 @@
 vendors/
+node_modules/
+package-lock.json
+*.map
+*.min.css

@@ -1,1 +1,7 @@
-a {}
+body {
+    background: $red;
+
+    @include breakpoint(laptop) { 
+        background: $black;
+     };
+}

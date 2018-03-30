@@ -19,7 +19,7 @@
     },
     "main": "gulpfile.js",
     "scripts": {
-        "gulp": "node ./node_modules/gulp/bin/gulp.js sass:build"
+        "gulp": "node ./node_modules/gulp/bin/gulp.js sass"
     },
     "license": "ISC"
 }
