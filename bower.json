@@ -1,0 +1,14 @@
+{
+    "name": "commerce_theme",
+    "version": "0.0.1",
+    "ignore": [
+      "**/.*",
+      "node_modules",
+      "bower_components"
+    ],
+    "dependencies": {},
+    "devDependencies": {
+      "normalize-css": "~8.0.0"
+    }
+  }
+  
