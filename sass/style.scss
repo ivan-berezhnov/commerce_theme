@@ -1,7 +1,8 @@
 @charset 'UTF-8';
 
 // 0.Vendors
-@import '../vendors/normalize-scss/_normalize.scss';
+@import '../vendors/bootstrap/scss/bootstrap-reboot.scss',
+        '../vendors/bootstrap/scss/bootstrap-grid.scss';
 
 // 1.Base
 @import '_base/_config.scss',

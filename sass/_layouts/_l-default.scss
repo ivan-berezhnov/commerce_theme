@@ -1,7 +1,412 @@
-body {
-    background: $red;
+// breakpoint-min(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
+* {
+  box-sizing: border-box;
+}
 
-    @include breakpoint(laptop) { 
-        background: $black;
-     };
+body {
+  height: 100%;
+  margin: 0;
+  background: $white;
+  @include setFont(('site-font', 'mobile'));
+  @include media-breakpoint-up(lg) {
+    @include setFont(('site-font', 'desktop'));
+  }
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.usp {
+  &__wrapper {
+    display: block;
+    background: #333;
+    @include setFont(('ups', 'desktop'));
+  }
+
+  &__items {
+    display: flex;
+    min-height: 29px;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  &__item {
+    display: none;
+    text-align: center;
+    @include setFont(('ups', 'mobile'));
+
+    &.phone {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 0 auto;
+
+      a {
+        padding-right: 10px;
+        @include setFont(('ups', 'mobile'));
+        @include media-breakpoint-up(sm) {
+          @include setFont(('ups', 'desktop'));
+        }
+      }
+    }
+
+    &.discount {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+
+      a {
+        padding-right: 10px;
+        @include setFont(('ups', 'mobile'));
+        @include media-breakpoint-up(sm) {
+          @include setFont(('ups', 'desktop'));
+        }
+      }
+    }
+
+    @include media-breakpoint-up(lg) {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      margin: 0;
+      @include setFont(('ups', 'desktop'));
+    }
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+}
+
+.header {
+  margin-top: 15px;
+  margin-bottom: 35px;
+
+  &__row {
+    justify-content: space-between;
+    margin: auto 0;
+    @include media-breakpoint-up(sm) {
+      align-items: center;
+    }
+    @include media-breakpoint-up(lm) {
+      margin-bottom: 15px;
+    }
+  }
+
+  &__logo {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
+    @include media-breakpoint-up(sm) {
+      padding-top: 10px;
+    }
+    &-first {
+      color: #7ED321;
+    }
+    &-link,
+    &-link:hover {
+      @include setFont(('header-logo', 'mobile'));
+      @include media-breakpoint-up(sm) {
+        @include setFont(('header-logo', 'desktop'));
+      }
+    }
+  }
+
+  &__menu,
+  &__search,
+  &__user,
+  &__basket {
+    margin-top: 12px;
+    a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      @include setFont(('header-icons', 'link'));
+      &:hover {
+        @include setFont(('header-icons', 'hover'));
+      }
+    }
+  }
+  @include media-breakpoint-up(sm) {
+    &__logo {
+      width: auto;
+    }
+  }
+  @include media-breakpoint-up(lg) {
+    &__menu {
+      display: none;
+    }
+    &__search {
+      margin-left: 0;
+    }
+    &__logo {
+      flex-grow: 1;
+      margin-right: -15px;
+    }
+    &__user {
+      margin-right: 15px;
+    }
+    &__basket {
+      margin-right: 0;
+    }
+  }
+}
+
+
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include setFont(('header-icons'));
+}
+
+.main-menu {
+  position: absolute;
+  left: -320px;
+  top: 0;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: visible;
+  transition: left 0.4s ease;
+  z-index: 999;
+
+  @include media-breakpoint-up(lg) {
+    position: relative;
+    left: auto;
+    top: auto;
+    height: auto;
+    margin-bottom: 30px;
+  }
+
+  &__items {
+    list-style: none;
+    margin: 0;
+    padding: 35px 0 0;
+    min-height: 100%;
+    width: 100%;
+    background: #fff;
+    @include media-breakpoint-up(lg) {
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+      height: auto;
+      width: auto;
+      background: none;
+    }
+  }
+
+
+  &__item {
+    :first-child .main-menu__link {
+      border-top: 1px solid #9B9B9B;
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: .75em 15px;
+    line-height: 1em;
+    font-size: 1em;
+
+    border-bottom: 1px solid rgb(229, 229, 229);
+    @include setFont(('main-menu', 'link', 'mobile'));
+    @include media-breakpoint-up(lg) {
+      padding: 0;
+      border-bottom: none;
+      @include setFont(('main-menu', 'link', 'desktop'));
+    }
+
+    &:hover,
+    &:focus {
+      background: #f5f5f5;
+      text-decoration: underline;
+      @include setFont(('main-menu', 'link-hover', 'mobile'));
+      @include media-breakpoint-up(lg) {
+        background: none;
+        @include setFont(('main-menu', 'link-hover', 'desktop'));
+      }
+    }
+  }
+
+  .menu-close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 10px;
+  }
+
+  &:target,
+  &[aria-expanded="true"] {
+    left: 0;
+    outline: none;
+    width: 100%;
+  }
+
+  &:target .menu-close,
+  &[aria-expanded="true"] .menu-close {
+    z-index: 1001;
+  }
+
+  &:target &__items,
+  &[aria-expanded="true"] &__items {
+    position: relative;
+    z-index: 1000;
+  }
+
+  &:target + .backdrop,
+  &[aria-expanded="true"] + .backdrop {
+    position: absolute;
+    display: block;
+    content: "";
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    background: #000;
+    background: rgba(0,0,0,.85);
+    cursor: default;
+  }
+}
+
+@supports (position: fixed) {
+  .main-menu,
+  .main-menu:target + .backdrop,
+  .main-menu[aria-expanded="true"] + .backdrop {
+    position: fixed;
+    @include media-breakpoint-up(lg) {
+      position: static;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .menu-toggle,
+  .main-menu .menu-close {
+    display: none;
+  }
+}
+
+
+.page__wrapper {
+  min-height: 100%;
+}
+
+.footer {
+  position: relative;
+  background-color: #fff;
+
+  &__line {
+    background: #333;
+    padding: 10px 0;
+    margin: 0 0 20px;
+  }
+
+  &__logo {
+    &-link,
+    &-link:hover {
+      display: block;
+      width: 100%;
+      @include setFont(('footer-logo', 'mobile'));
+
+      @include media-breakpoint-up(sm) {
+        @include setFont(('footer-logo', 'desktop'));
+      }
+    }
+  }
+
+  &__copyright {
+    border-top: #333 2px solid;
+    &-text {
+      padding-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+  }
+
+  &__menu-cat {
+    border-bottom: 1px solid #e5e4e4;
+    @include media-breakpoint-up(sm) {
+      border-bottom: none;
+      border-right: 1px solid #e5e4e4;
+    }
+  }
+
+  &__menu-cat,
+  &__menu-company,
+  &__menu-social {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    list-style: none;
+
+    a {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+
+  &__menu-cat a {
+    text-align: center;
+    @include setFont(('footer-menu-cat', 'mobile'));
+
+    @include media-breakpoint-up(sm) {
+      text-align: left;
+      @include setFont(('footer-menu-cat', 'desktop'));
+    }
+  }
+  &__menu-company {
+
+    @include media-breakpoint-up(lg) {
+      border-right: 1px solid #e5e4e4;
+    }
+    a {
+      text-align: center;
+      @include setFont(('footer-menu-company', 'mobile'));
+
+      @include media-breakpoint-up(sm) {
+        text-align: left;
+        @include setFont(('footer-menu-company', 'desktop'));
+      }
+    }
+  }
+  &__menu-social {
+    flex-direction: row;
+    justify-content: space-around;
+    @include media-breakpoint-up(lg) {
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    a {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      @include setFont(('footer-menu-social', 'mobile'));
+      @include media-breakpoint-up(sm) {
+        @include setFont(('footer-menu-social', 'desktop'));
+      }
+    }
+    span {
+      display: none;
+      @include media-breakpoint-up(lg) {
+        display: inline-block;
+        margin-left: 10px;
+      }
+    }
+
+    svg {
+      width: 40px;
+      height: 40px;
+      @include media-breakpoint-up(lg) {
+        width: 22px;
+        height: 22px;
+      }
+
+    }
+  }
 }

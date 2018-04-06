@@ -1,79 +1,14 @@
-/***************************
-BREAKPOINTS / Media Queries
-***************************/
 
-/* @include breakpoint(mobile) { selectors }; */
-@mixin breakpoint($point) {
-    /* Extra Small Devices, Phones */
-    @if $point == smobile {
-        @media only screen and (min-width : 320px) { @content ; }
-   }
-    /* Extra Small Devices, Phones */
-    @else if $point == mobile {
-        @media only screen and (min-width : 480px) { @content ; }
-   }
-   /* Small Devices, Tablets */
-    @else if $point == tablet {
-        @media only screen and (min-width : 768px) { @content ; }
-   }
-   /* Medium Devices, Desktops */
-    @else if $point == laptop {
-        @media only screen and (min-width : 992px) { @content ; }
-   }
-   /* Large Devices, Wide Screens */
-    @else if $point == desktop {
-        @media only screen and (min-width : 1200px) { @content ; }
-   }
- }
- 
- /* @include transition(all,2s,ease-out); */
-@mixin transition($what: all, $time: 0.2s, $how: ease-in-out) {
-    -webkit-transition: $what $time $how;
-    -moz-transition:    $what $time $how;
-    -ms-transition:     $what $time $how;
-    -o-transition:      $what $time $how;
-    transition:         $what $time $how;
-}
-
-/* h1 { @include heading-1; } */
-@mixin heading {
-    @include title-face;
-    margin-bottom: 0.35em;
-    line-height: 1.2;
-    color: inherit;
-    a {
-      @include heading-link;
+/// Map deep get
+/// @param {Map} $map - Map
+/// @param {Arglist} $keys - Key chain
+/// @return {*} - Desired value
+//@function map-deep-get($map, $keys...) {
+@function map-deep-get($map, $keys) {
+    @each $key in $keys {
+      $map: map-get($map, $key);
     }
-  }
-  
-@mixin heading-1 {
-  @include heading;
-  font-size: 3.375rem;
-}
-  
-@mixin heading-2 {
-  @include heading;
-  font-size: 2.966rem;
-}
-  
-@mixin heading-3 {
-  @include heading;
-  font-size: 1.5rem;
-}
-  
-@mixin heading-4 {
-  @include heading;
-  font-size: 1.318rem;
-}
-  
-@mixin heading-5 {
-  @include heading;
-  font-size: 1rem;
-}
-  
-@mixin heading-6 {
-  @include heading;
-  font-size: 0.875rem;
+    @return $map;
 }
 
 /* @include setFont(('article', 'title')); */
@@ -91,6 +26,55 @@ BREAKPOINTS / Media Queries
   margin-top: map-deep-get($styles, append($keys, 'margin-top'));
   text-decoration: map-deep-get($styles, append($keys, 'text-decoration'));
   text-transform: map-deep-get($styles, append($keys, 'text-transform'));
+}
+
+$rem-baseline: 16px !default;
+$rem-fallback: true !default;
+$rem-px-only: false !default;
+
+// list-separator polyfill by Hugo Giraudel (https://sass-compatibility.github.io/#list_separator_function)
+@function rem-separator($list) {
+  @if function-exists("list-separator") == true {
+    @return list-separator($list);
+  }
+
+  $test-list: ();
+  @each $item in $list {
+    $test-list: append($test-list, $item, space);
+  }
+
+  @return if($test-list == $list, space, comma);
+}
+
+@mixin rem-baseline($zoom: 100%) {
+  font-size: $zoom / 16px * $rem-baseline;
+}
+
+@function rem-convert($to, $values...) {
+  $result: ();
+  $separator: rem-separator($values);
+
+  @each $value in $values {
+    @if type-of($value) == "number" and unit($value) == "rem" and $to == "px" {
+      $result: append($result, $value / 1rem * $rem-baseline, $separator);
+    } @else if type-of($value) == "number" and unit($value) == "px" and $to == "rem" {
+      $result: append($result, $value / ($rem-baseline / 1rem), $separator);
+    } @else if type-of($value) == "list" {
+      $result: append($result, rem-convert($to, $value...), $separator);
+    } @else {
+      $result: append($result, $value, $separator);
+    }
+  }
+
+  @return if(length($result) == 1, nth($result, 1), $result);
+}
+
+@function rem($values...) {
+  @if $rem-px-only {
+    @return rem-convert(px, $values...);
+  } @else {
+    @return rem-convert(rem, $values...);
+  }
 }
 
 @mixin rem($properties, $values...) {
