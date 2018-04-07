@@ -3,3 +3,4 @@ node_modules/
 package-lock.json
 *.map
 *.min.css
+!prototypes/css/style.min.css
